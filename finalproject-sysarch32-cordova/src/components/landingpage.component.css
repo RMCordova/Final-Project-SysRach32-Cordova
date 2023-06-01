@@ -1,0 +1,38 @@
+.landing-page-container {
+    background-image: url('../Images/solo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+  }
+  
+  .landing-page-container h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .landing-page-container p {
+    margin-bottom: 30px;
+  }
+  
+  .landing-page-container .btn {
+    color: #040404;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 0;
+  }
+  
+  .landing-page-container .btn:hover {
+    text-decoration: none;
+  }
+  
+  

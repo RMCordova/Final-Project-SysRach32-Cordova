@@ -1,0 +1,32 @@
+.main-menu-container {
+    background-image: url('path/to/your/image.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    color: #fff;
+  }
+  
+  .main-menu-container h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .main-menu-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .main-menu-container li {
+    margin-bottom: 10px;
+  }
+  
+  .main-menu-container a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .main-menu-container a:hover {
+    text-decoration: underline;
+  }
+  
