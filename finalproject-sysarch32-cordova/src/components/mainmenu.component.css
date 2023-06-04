@@ -1,5 +1,5 @@
 .main-menu-container {
-    background-image: url('path/to/your/image.jpg');
+    background-image: url('../Images/blue-back.avif');
     background-size: cover;
     background-position: center;
     padding: 20px;
