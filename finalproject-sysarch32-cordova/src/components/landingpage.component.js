@@ -10,8 +10,7 @@ function LandingPage() {
       <p>This is the landing page content. Start exploring now!</p>
       <Link to="/mainmenu-page" className="btn btn-primary">Explore</Link>
       <Routes>
-        <Route exact path="/" element={<LandingPage />} />
-        <Route path="/mainmenu-page" element={<MainMenuPage />} />
+        <Route exact path="/mainmenu-page" element={<MainMenuPage />} />
       </Routes>
     </div>
   );
