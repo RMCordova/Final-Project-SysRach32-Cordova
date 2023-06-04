@@ -16,23 +16,27 @@
   }
   
   .landing-page-container h2 {
-    font-size: 30px;
+    font-size: 36px;
     margin-bottom: 20px;
   }
   
   .landing-page-container p {
+    font-size: 18px;
     margin-bottom: 30px;
   }
   
   .landing-page-container .btn {
-    color: #040404;
-    text-decoration: none;
+    display: right;
+    padding: 10px 20px;
     font-size: 18px;
-    padding: 0;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
   }
   
   .landing-page-container .btn:hover {
-    text-decoration: none;
+    background-color: #0056b3;
   }
-  
   
