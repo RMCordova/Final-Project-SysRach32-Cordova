@@ -4,8 +4,6 @@ import axios from 'axios';
 export default class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
 
     try {
       const response = await axios.post('/sign-in', {
@@ -26,7 +24,6 @@ export default class Login extends Component {
     }
   };
 
-  render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <h3>Sign In</h3>
