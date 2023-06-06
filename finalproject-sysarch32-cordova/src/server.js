@@ -1,6 +1,15 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb://localhost:27017'; // MongoDB connection string
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
+const port = 3000;
+
+const uri = 'mongodb://localhost:27017/'; // MongoDB connection string
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db;
 
@@ -42,17 +51,11 @@ const connectToMongoDB = async () => {
   }
 };
 
-connectToMongoDB();
-
-
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
-const port = 3000;
+connectToMongoDB().then(() => {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+});
 
 app.get('/test-connection', (req, res) => {
   if (db) {
@@ -66,7 +69,7 @@ app.post('/sign-up', async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    // Insert user data into the 'PersonalDetails' collection
+    // Insert user data into the 'personalDetails' collection
     const result = await db.collection('PersonalDetails').insertOne({ firstName, lastName, email, password });
 
     if (result.insertedCount === 1) {
@@ -82,6 +85,32 @@ app.post('/sign-up', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.post('/sign-in', async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      // Check if the user exists in the database
+      const user = await db.collection('PersonalDetails').findOne({ email });
+  
+      if (!user) {
+        console.log('User not found');
+        res.status(401).json({ message: 'Invalid credentials' });
+        return;
+      }
+  
+      // Check if the password matches
+      if (user.password !== password) {
+        console.log('Invalid password');
+        res.status(401).json({ message: 'Invalid credentials' });
+        return;
+      }
+  
+      // Login successful
+      console.log('Logged in successfully');
+      res.status(200).json({ message: 'Logged in successfully' });
+    } catch (error) {
+      console.error('Error logging in:', error);
+      res.status(500).json({ message: 'Error logging in' });
+    }
+  });
+  

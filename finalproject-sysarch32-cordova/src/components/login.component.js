@@ -1,13 +1,40 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
+
 export default class Login extends Component {
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    try {
+      const response = await axios.post('/sign-in', {
+        email: formData.get('email'),
+        password: formData.get('password')
+      });
+
+      console.log(response.data);
+      // Handle success (e.g., redirect to a dashboard page)
+      alert('Logged in successfully!');
+      
+      // Optionally, you can reset the form fields
+      form.reset();
+    } catch (error) {
+      console.error('Error logging in:', error);
+      // Handle error (e.g., show an error message)
+      alert('Error logging in. Please try again.');
+    }
+  };
+
   render() {
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <h3>Sign In</h3>
         <div className="mb-3">
           <label>Email address</label>
           <input
             type="email"
+            name="email"
             className="form-control"
             placeholder="Enter email"
           />
@@ -16,6 +43,7 @@ export default class Login extends Component {
           <label>Password</label>
           <input
             type="password"
+            name="password"
             className="form-control"
             placeholder="Enter password"
           />
@@ -41,6 +69,6 @@ export default class Login extends Component {
           Forgot <a href="#">password?</a>
         </p>
       </form>
-    )
+    );
   }
 }
