@@ -1,25 +1,55 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
+
 export default class SignUp extends Component {
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    try {
+      const response = await axios.post('/signup', {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        password: formData.get('password')
+      });
+
+      console.log(response.data);
+      // Handle success (e.g., show a success message)
+    } catch (error) {
+      console.error('Error signing up:', error);
+      // Handle error (e.g., show an error message)
+    }
+  };
+
   render() {
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <h3>Sign Up</h3>
         <div className="mb-3">
           <label>First name</label>
           <input
             type="text"
+            name="firstName" // Add name attribute for form data retrieval
             className="form-control"
             placeholder="First name"
           />
         </div>
         <div className="mb-3">
           <label>Last name</label>
-          <input type="text" className="form-control" placeholder="Last name" />
+          <input
+            type="text"
+            name="lastName" // Add name attribute for form data retrieval
+            className="form-control"
+            placeholder="Last name"
+          />
         </div>
         <div className="mb-3">
           <label>Email address</label>
           <input
             type="email"
+            name="email" // Add name attribute for form data retrieval
             className="form-control"
             placeholder="Enter email"
           />
@@ -28,6 +58,7 @@ export default class SignUp extends Component {
           <label>Password</label>
           <input
             type="password"
+            name="password" // Add name attribute for form data retrieval
             className="form-control"
             placeholder="Enter password"
           />
@@ -41,6 +72,6 @@ export default class SignUp extends Component {
           Already registered <a href="/sign-in">sign in?</a>
         </p>
       </form>
-    )
+    );
   }
 }
