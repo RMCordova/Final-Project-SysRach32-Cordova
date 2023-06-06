@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 const port = 3000;
 
-const uri = 'mongodb://localhost:27017/'; // MongoDB connection string
+const uri = 'mongodb+srv://Shin:<password>@cluster0.nbn3yqo.mongodb.net/?retryWrites=true&w=majority'; // MongoDB connection string
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db;
 
@@ -17,10 +17,10 @@ const connectToMongoDB = async () => {
   try {
     await client.connect();
     console.log('Connected to MongoDB');
-    db = client.db('SysArch32'); // Database name
+    db = client.db('SysArch32FinalProject'); // Database name
 
-    // Add schema validation for PersonalDetails collection
-    db.createCollection('PersonalDetails', {
+    // Add schema validation for UserDetails collection
+    db.createCollection('UserDetails', {
       validator: {
         $jsonSchema: {
           bsonType: 'object',
@@ -69,8 +69,8 @@ app.post('/sign-up', async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    // Insert user data into the 'personalDetails' collection
-    const result = await db.collection('PersonalDetails').insertOne({ firstName, lastName, email, password });
+    // Insert user data into the 'UserDetails' collection
+    const result = await db.collection('UserDetails').insertOne({ firstName, lastName, email, password });
 
     if (result.insertedCount === 1) {
       console.log('User registered successfully:', result.insertedId);
@@ -90,7 +90,7 @@ app.post('/sign-in', async (req, res) => {
   
     try {
       // Check if the user exists in the database
-      const user = await db.collection('PersonalDetails').findOne({ email });
+      const user = await db.collection('UserDetails').findOne({ email });
   
       if (!user) {
         console.log('User not found');
