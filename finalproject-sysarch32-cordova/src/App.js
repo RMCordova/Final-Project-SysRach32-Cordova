@@ -6,6 +6,7 @@ import Login from './components/login.component';
 import SignUp from './components/signup.component';
 import LandingPage from './components/landingpage.component';
 
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
