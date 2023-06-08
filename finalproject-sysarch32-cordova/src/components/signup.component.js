@@ -1,37 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SignUp = () => {
+function SignUp() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    fName: '',
+    lName: '',
     email: '',
     password: ''
   });
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await axios.post('/sign-up', formData);
-
-      console.log(response.data);
-      // Handle success (e.g., show a success message)
-      alert('User registered successfully!');
-
-      // Optionally, you can reset the form fields
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: ''
-      });
-    } catch (error) {
-      console.error('Error registering user:', error);
-      // Handle error (e.g., show an error message)
-      alert('Error registering user. Please try again.');
-    }
-  };
 
   const handleChange = (event) => {
     setFormData({
@@ -40,17 +16,41 @@ const SignUp = () => {
     });
   };
 
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('/sign-up', formData);
+      console.log(response.data);
+
+      if (response.status === 200) {
+        alert('Data saved successfully');
+        setFormData({
+          fName: '',
+          lName: '',
+          email: '',
+          password: ''
+        });
+      } else {
+        alert('Error saving data. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error saving data:', error);
+      alert('Error saving data. Please try again.');
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleOnSubmit}>
       <h3>Sign Up</h3>
       <div className="mb-3">
         <label>First name</label>
         <input
           type="text"
-          name="firstName"
+          name="fName"
           className="form-control"
           placeholder="First name"
-          value={formData.firstName}
+          value={formData.fName}
           onChange={handleChange}
         />
       </div>
@@ -58,10 +58,10 @@ const SignUp = () => {
         <label>Last name</label>
         <input
           type="text"
-          name="lastName"
+          name="lName"
           className="form-control"
           placeholder="Last name"
-          value={formData.lastName}
+          value={formData.lName}
           onChange={handleChange}
         />
       </div>
@@ -97,6 +97,6 @@ const SignUp = () => {
       </p>
     </form>
   );
-};
+}
 
 export default SignUp;

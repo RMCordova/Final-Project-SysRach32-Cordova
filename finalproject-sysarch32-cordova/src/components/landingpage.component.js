@@ -6,8 +6,6 @@ import MainMenuPage from './mainmenu.component';
 function LandingPage() {
   return (
     <div className="landing-page-container">
-      <h1>Welcome to the Landing Page</h1>
-      <p>This is the landing page content. Start exploring now!</p>
       <Link to="/mainmenu-page" className="btn btn-primary">Explore</Link>
       <Routes>
         <Route exact path="/mainmenu-page" element={<MainMenuPage />} />
