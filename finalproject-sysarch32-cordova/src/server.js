@@ -1,116 +1,62 @@
+// To connect with your mongoDB database
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://Shin:<password>@cluster0.nbn3yqo.mongodb.net/?retryWrites=true&w=majority', {
+    dbName: 'SysArch32FinalProject',
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}, err => err ? console.log(err) :
+    console.log('Connected to yourDB-name database'));
+
+// Schema for users of app
+const UserSchema = new mongoose.Schema({
+  fName: {
+    type: String,
+    required: true,
+  },
+  lName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+const User = mongoose.model('UserDetails', UserSchema);
+User.createIndexes();
+
+// For backend and express
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { MongoClient } = require('mongodb');
-
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const cors = require("cors");
+console.log("App listen at port 3000");
+app.use(express.json());
 app.use(cors());
-const port = 3000;
+app.get("/", (req, resp) => {
 
-const uri = 'mongodb+srv://Shin:<password>@cluster0.nbn3yqo.mongodb.net/?retryWrites=true&w=majority'; // MongoDB connection string
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-let db;
+  resp.send("App is Working");
+  
+});
 
-const connectToMongoDB = async () => {
+app.post("/sign-up", async (req, resp) => {
   try {
-    await client.connect();
-    console.log('Connected to MongoDB');
-    db = client.db('SysArch32FinalProject'); // Database name
-
-    // Add schema validation for UserDetails collection
-    db.createCollection('UserDetails', {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          required: ['firstName', 'lastName', 'email', 'password'],
-          properties: {
-            firstName: {
-              bsonType: 'string',
-              description: 'First name must be a string'
-            },
-            lastName: {
-              bsonType: 'string',
-              description: 'Last name must be a string'
-            },
-            email: {
-              bsonType: 'string',
-              description: 'Email must be a string'
-            },
-            password: {
-              bsonType: 'string',
-              description: 'Password must be a string'
-            }
-          }
-        }
+      const user = new User(req.body);
+      let result = await user.save();
+      result = result.toObject();
+      if (result) {
+          delete result.password;
+          resp.send(req.body);
+          console.log(result);
+      } else {
+          console.log("User already register");
       }
-    });
-  } catch (err) {
-    console.error('Error connecting to MongoDB:', err);
-  }
-};
 
-connectToMongoDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
-});
-
-app.get('/test-connection', (req, res) => {
-  if (db) {
-    res.status(200).json({ message: 'Connected to MongoDB' });
-  } else {
-    res.status(500).json({ message: 'Not connected to MongoDB' });
+  } catch (e) {
+      resp.send("Something Went Wrong");
   }
 });
-
-app.post('/sign-up', async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-
-  try {
-    // Insert user data into the 'UserDetails' collection
-    const result = await db.collection('UserDetails').insertOne({ firstName, lastName, email, password });
-
-    if (result.insertedCount === 1) {
-      console.log('User registered successfully:', result.insertedId);
-      res.status(200).json({ message: 'User registered successfully' });
-    } else {
-      console.error('Error registering user');
-      res.status(500).json({ message: 'Error registering user' });
-    }
-  } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Error registering user' });
-  }
-});
-
-app.post('/sign-in', async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      // Check if the user exists in the database
-      const user = await db.collection('UserDetails').findOne({ email });
-  
-      if (!user) {
-        console.log('User not found');
-        res.status(401).json({ message: 'Invalid credentials' });
-        return;
-      }
-  
-      // Check if the password matches
-      if (user.password !== password) {
-        console.log('Invalid password');
-        res.status(401).json({ message: 'Invalid credentials' });
-        return;
-      }
-  
-      // Login successful
-      console.log('Logged in successfully');
-      res.status(200).json({ message: 'Logged in successfully' });
-    } catch (error) {
-      console.error('Error logging in:', error);
-      res.status(500).json({ message: 'Error logging in' });
-    }
-  });
-  
+app.listen(3000);
